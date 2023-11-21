@@ -1,0 +1,21 @@
+---
+title: "Nextflow Basics"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+---
+
+```{r, child = "assets/header-lab.Rmd"}
+```
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(chunk.title = TRUE, engine.opts = list(bash = "-l"))
+```
+
+Nextflow is a domain specific language (DSL) implemented on top of the Groovy programming language, which in turn is a super-set of the Java programming language. This means that Nextflow can run any Groovy or Java code.
+
+# Variables
+
+To define a variable, simply assign a value to it:
+
+
+```{r,child="assets/footer-lab.Rmd"}
+```
