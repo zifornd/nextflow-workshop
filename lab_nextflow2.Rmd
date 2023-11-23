@@ -1,0 +1,132 @@
+---
+title: "Nextflow Intermediate"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+---
+
+```{r, child = "assets/header-lab.Rmd"}
+```
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(chunk.title = TRUE, engine.opts = list(bash = "-l"))
+```
+
+# Introduction
+
+In this workshop, we will explore the advanced features of the Nextflow language and runtime, and learn how to use them to write efficient and scalable data-intensive workflows. We will cover topics such as parallel execution, error handling, and workflow customization.
+
+# Objectives
+
+- [Channels]
+- [Processes]
+- [Operators]
+
+# Tutorial
+
+In this workshop, we will explore the advanced features of the Nextflow language and runtime, and learn how to use them to write efficient and scalable data-intensive workflows. We will cover topics such as parallel execution, error handling, and workflow customization.
+
+## Channels
+
+Nextflow is based on the dataflow programming model in which processes communicate through [channels](https://training.nextflow.io/basic_training/channels/).
+
+## Processes
+
+In Nextflow, a [process](https://training.nextflow.io/basic_training/processes/) is the basic processing primitive to execute a user script. The process definition starts with the keyword process, followed by process name and finally the process body delimited by curly braces. The process body must contain a string which represents the command or, more generally, a script that is executed by it. A basic process looks like the following example:
+
+## Operators
+
+In this chapter, we take a curated tour of the Nextflow [operators](https://training.nextflow.io/basic_training/operators/). Commonly used and well understood operators are not covered here - only those that we've seen could use more attention or those where the usage could be more elaborate. These set of operators have been chosen to illustrate tangential concepts and Nextflow features.
+
+### flatten()
+
+The flatten operator transforms a channel in such a way that every tuple is flattened so that each entry is emitted as a sole element by the resulting channel.
+
+Example:
+```{bash,comment=''}
+cat bin/example_flatten.nf
+```
+Output:
+```{bash}
+nextflow run bin/example_flatten.nf
+```
+
+### collect()
+
+The collect operator collects all of the items emitted by a channel in a list and returns the object as a sole emission.
+
+Example:
+```{bash,comment=''}
+cat bin/example_collect.nf
+```
+Output:
+```{bash}
+nextflow run bin/example_collect.nf
+```
+
+### groupTuple()
+
+The groupTuple operator collects tuples (or lists) of values emitted by the source channel, grouping the elements that share the same key. Finally, it emits a new tuple object for each distinct key collected.
+
+Example:
+```{bash,comment=''}
+cat bin/example_groupTuple.nf
+```
+Output:
+```{bash}
+nextflow run bin/example_groupTuple.nf
+```
+
+### branch()
+
+The branch operator allows you to forward the items emitted by a source channel to one or more output channels.
+
+The selection criterion is defined by specifying a closure that provides one or more boolean expressions, each of which is identified by a unique label. For the first expression that evaluates to a true value, the item is bound to a named channel as the label identifier. For example:
+
+```{bash,comment=''}
+cat bin/example_branch.nf
+```
+Output:
+```{bash}
+nextflow run bin/example_branch.nf
+```
+
+
+### splitCsv()
+
+A common Nextflow pattern is for a simple samplesheet to be passed as primary input into a workflow. We'll see some more complicated ways to manage these inputs later on in the workshop, but the splitCsv (docs) is an excellent tool to have in a pinch. This operator will parse a csv/tsv and return a channel where each item is a row in the csv/tsv:
+
+```{bash,comment=''}
+cat bin/example_splitCsv.nf
+```
+Output:
+
+```{bash}
+nextflow run bin/example_splitCsv.nf
+```
+
+### multiMap()
+
+The [multiMap](https://www.nextflow.io/docs/latest/operator.html#multimap) operator is a way of taking a single input channel and emitting into multiple channels for each input element.
+
+Example:
+
+```{bash,comment=''}
+cat bin/example_multiMap.nf
+```
+Output:
+```{bash}
+nextflow run bin/example_multiMap.nf
+```
+
+# Exercises
+
+The exercies below are designed to strengthen your knowledge in Nextflow more. The solution to each problem is blurred, only after attempting to solve the problem yourself should you look at the solution. Should you need any help, please ask one of the instructors.
+
+1.Given sample sheet contain multiple entries for same sample and mixed of single and paired end, create separate channel for single and multiple entries.
+
+```{r,echo=FALSE,comment=''}
+data <- read.csv("https://raw.githubusercontent.com/nf-core/test-datasets/rnaseq/samplesheet/v3.10/samplesheet_test.csv")
+data
+```
+
+```{r,child="assets/footer-lab.Rmd"}
+```
