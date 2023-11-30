@@ -12,7 +12,7 @@ knitr::opts_chunk$set(chunk.title = TRUE, engine.opts = list(bash = "-l"))
 
 # Introduction
 
-In this workshop, we will explore the advanced features of the Nextflow language and runtime, and learn how to use them to write efficient and scalable data-intensive workflows. We will cover topics such as parallel execution, error handling, and workflow customization.
+In this workshop, we will explore the advanced features of the Nextflow language and runtime, and learn how to use them to write efficient and scalable data-intensive workflows.
 
 # Objectives
 
@@ -22,15 +22,77 @@ In this workshop, we will explore the advanced features of the Nextflow language
 
 # Tutorial
 
-In this workshop, we will explore the advanced features of the Nextflow language and runtime, and learn how to use them to write efficient and scalable data-intensive workflows. We will cover topics such as parallel execution, error handling, and workflow customization.
+We will cover topics such as parallel Channels, Processes, and Operators.
 
 ## Channels
 
 Nextflow is based on the dataflow programming model in which processes communicate through [channels](https://training.nextflow.io/basic_training/channels/).
 
+Channel types
+Nextflow distinguishes between two different kinds of channels: queue channels and value channels.
+
+1. Sending a message is an asynchronous (i.e. non-blocking) operation, which means the sender doesn’t have to wait for the receiving process.
+
+2. Receiving a message is a synchronous (i.e. blocking) operation, which means the receiving process must wait until a message has arrived.
+
+**Queue** channels are a type of channel in which data is consumed (used up) to make input for a process/operator. Queue channels can be created in two ways:
+
+As the outputs of a process.
+Explicitly using channel factory methods such as Channel.of or Channel.fromPath.
+
+### Channel.of()
+When you want to create a channel containing multiple values you can use the channel factory Channel.of. Channel.of allows the creation of a queue channel with the values specified as arguments, separated by a ,.
+
+### Channel.fromList()
+You can use the Channel.fromList method to create a queue channel from a list object.
+
+### Channel.fromPath()
+The fromPath factory method creates a queue channel containing one or more files matching a file path.
+
+### Channel.fromFilePairs()
+We have seen how to process files individually using fromPath. In Bioinformatics we often want to process files in pairs or larger groups, such as read pairs in sequencing.
+
+For example:
+
+Example:
+```{bash,comment=''}
+cat bin/example_channels.nf
+```
+Output:
+```{bash}
+nextflow run bin/example_channels.nf
+```
+
 ## Processes
 
-In Nextflow, a [process](https://training.nextflow.io/basic_training/processes/) is the basic processing primitive to execute a user script. The process definition starts with the keyword process, followed by process name and finally the process body delimited by curly braces. The process body must contain a string which represents the command or, more generally, a script that is executed by it. A basic process looks like the following example:
+We now know how to create and use Channels to send data around a workflow. We will now see how to run tasks within a workflow using [processes](https://training.nextflow.io/basic_training/processes/).
+
+A process is the way Nextflow executes commands you would run on the command line or custom scripts.
+
+The syntax is defined as follows:
+```
+process < NAME > {
+  [ directives ]
+  input:
+  < process inputs >
+  output:
+  < process outputs >
+  when:
+  < condition >
+  [script|shell|exec]:
+  < user script to be executed >
+}
+```
+For example:
+
+Example:
+```{bash,comment=''}
+cat bin/example_process.nf
+```
+Output:
+```{bash}
+nextflow run bin/example_collect.nf
+```
 
 ## Operators
 
@@ -89,7 +151,6 @@ Output:
 nextflow run bin/example_branch.nf
 ```
 
-
 ### splitCsv()
 
 A common Nextflow pattern is for a simple samplesheet to be passed as primary input into a workflow. We'll see some more complicated ways to manage these inputs later on in the workshop, but the splitCsv (docs) is an excellent tool to have in a pinch. This operator will parse a csv/tsv and return a channel where each item is a row in the csv/tsv:
@@ -121,7 +182,15 @@ nextflow run bin/example_multiMap.nf
 
 The exercies below are designed to strengthen your knowledge in Nextflow more. The solution to each problem is blurred, only after attempting to solve the problem yourself should you look at the solution. Should you need any help, please ask one of the instructors.
 
-1.Given sample sheet contain multiple entries for same sample and mixed of single and paired end, create separate channel for single and multiple entries.
+1. Create a Nextflow module for samtools to generate an output structure in the directory "results," with a separate sub-directory for each given sample ID, and within each sub-directory, the results needs to be there
+
+Your Nextflow module should include the following:
+
+* Input parameters for specifying the input data (e.g., aligned BAM files).
+
+* script should contain any two functions from samtools.
+
+2. Given sample sheet contain multiple entries for same sample and mixed of single and paired end, create separate channel for single and multiple entries.
 
 ```{r,echo=FALSE,comment=''}
 data <- read.csv("https://raw.githubusercontent.com/nf-core/test-datasets/rnaseq/samplesheet/v3.10/samplesheet_test.csv")
