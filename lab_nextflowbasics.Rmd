@@ -12,9 +12,472 @@ knitr::opts_chunk$set(chunk.title = TRUE, engine.opts = list(bash = "-l"))
 
 Nextflow is a domain specific language (DSL) implemented on top of the Groovy programming language, which in turn is a super-set of the Java programming language. This means that Nextflow can run any Groovy or Java code.
 
+# Printing Values
+
+To print something is as easy as using one of the ``print`` or ``println`` methods.
+
+Example:
+```{groovy, engine.path = '/usr/bin/groovy', comment = ''}
+println("Hello, World!")
+```
+
 # Variables
 
 To define a variable, simply assign a value to it:
+
+```{groovy, engine.path = '/usr/bin/groovy', comment = ''}
+x = 1
+println x
+
+x = new java.util.Date()
+println x
+```
+```{groovy, engine.path = '/usr/bin/groovy', comment = ''}
+x = new java.util.Date()
+println x
+```
+```{groovy, engine.path = '/usr/bin/groovy', comment = ''}
+x = -3.1499392
+println x
+```
+```{groovy, engine.path = '/usr/bin/groovy', comment = ''}
+x = false
+println x
+
+```
+```{groovy, engine.path = '/usr/bin/groovy', comment = ''}
+x = "Hi"
+println x
+```
+
+Local variables are defined using the ``def`` keyword:
+
+```{groovy, engine.path = '/usr/bin/groovy', comment = ''}
+def x = 'foo'
+println x
+```
+
+The ``def`` should be always used when defining variables **local to a function or a closure**.
+
+# Data Types
+
+## Lists
+
+A List object can be defined by placing the list items in square brackets:
+
+```{groovy, engine.path = '/usr/bin/groovy', comment = ''}
+list = [10, 20, 30, 40]
+```
+
+The items inside a list can be accessed using their index, list indexing begins at ``[0]``.
+
+```{groovy, engine.path = '/usr/bin/groovy', comment = ''}
+list = [10, 20, 30, 40]
+println list[0]
+println list.get(0)
+```
+
+The ``size`` method gives the length of a list.
+
+```{groovy, engine.path = '/usr/bin/groovy', comment = ''}
+list = [10, 20, 30, 40]
+println list.size()
+```
+
+The ``assert`` keyword is to test if a condition is true (similar to an if function). Here, Groovy will print nothing if it is correct, else it will raise an AssertionError message.
+
+```{groovy, engine.path = '/usr/bin/groovy', comment = ''}
+list = [10, 20, 30, 40]
+assert list[0] == 10
+```
+Lists can also be indexed with negative indexes and reversed ranges.
+
+```{groovy, engine.path = '/usr/bin/groovy', comment = ''}
+list = [0, 1, 2]
+assert list[-1] == 2
+assert list[-1..0] == list.reverse()
+```  
+
+><i class="fa-sharp fa-solid fa-circle-info"></i> __Info__:  
+In the last assert line we are referencing the initial list and converting this with a "shorthand" range (``..``), to run from the -1th element (2) to the 0th element (0).
+
+## Maps
+
+Maps are like lists that have an arbitrary key instead of an integer. Therefore, the syntax is very much aligned.
+
+```{groovy, engine.path = '/usr/bin/groovy', comment = ''}
+map = [a: 0, b: 1, c: 2]
+```
+
+Maps can be accessed in a conventional square-bracket syntax or as if the key was a property of the map.
+
+
+```{groovy, engine.path = '/usr/bin/groovy', comment = ''}
+map = [a: 0, b: 1, c: 2]
+assert map['a'] == 0 
+assert map.b == 1 
+assert map.get('c') == 2 
+```
+
+To add data or to modify a map, the syntax is similar to adding values to a list:
+
+```{groovy, engine.path = '/usr/bin/groovy', comment = ''}
+map = [a: 0, b: 1, c: 2]
+map['a'] = 'x' 
+map.b = 'y' 
+map.put('c', 'z') 
+assert map == [a: 'x', b: 'y', c: 'z']
+```
+
+## String interpolation
+
+String literals can be defined by enclosing them with either single- (``''``) or double- (``""``) quotation marks.
+
+```{groovy, engine.path = '/usr/bin/groovy', comment = ''}
+foxtype = 'quick'
+foxcolor = ['b', 'r', 'o', 'w', 'n']
+println "The $foxtype ${foxcolor.join()} fox"
+
+x = 'Hello'
+println '$x + $y'
+```  
+
+><i class="fa-sharp fa-solid fa-circle-info"></i> __Info__:  
+Note the different use of ``$`` and ``${..}`` syntax to interpolate value expressions in a string literal. The ``$x`` variable was *not* expanded, as it was enclosed by single quotes.  
+
+Finally, string literals can also be defined using the ``/`` character as a delimiter. They are known as __slashy__ strings and are useful for defining regular expressions and patterns, as there is no need to escape backslashes. As with double-quote strings they allow to interpolate variables prefixed with a ``$`` character.
+
+Try the following to see the difference:
+
+```{groovy, engine.path = '/usr/bin/groovy', comment = ''}
+x = /tic\tac\toe/
+y = 'tic\tac\toe'
+
+println x
+println y
+```
+
+# Control Structures
+
+## If statement
+
+The if statement uses the same syntax common in other programming languages, such as Java, C, JavaScript, etc.
+
+```{groovy, engine.path = '/usr/bin/groovy', comment = '', eval = FALSE}
+if (< boolean expression >) {
+    // true branch
+}
+else {
+    // false branch
+}
+```
+
+The else branch is optional. Also, the curly brackets are optional when the branch defines just a single statement.
+
+```{groovy, engine.path = '/usr/bin/groovy', comment = ''}
+x = 1
+if (x > 10)
+    println 'Hello'
+```
+
+``null``, empty strings, and empty collections are evaluated to false.
+
+Therefore a statement like:
+
+```{groovy, engine.path = '/usr/bin/groovy', comment = ''}
+list = [1, 2, 3]
+if (list != null && list.size() > 0) {
+    println list
+}
+else {
+    println 'The list is empty'
+}
+```
+
+Can be written as:
+
+```{groovy, engine.path = '/usr/bin/groovy', comment = ''}
+list = [1, 2, 3]
+if (list)
+    println list
+else
+    println 'The list is empty'
+```
+
+## For Loops
+
+The classical for loop syntax is supported as shown here:
+
+```{groovy, engine.path = '/usr/bin/groovy', comment = ''}
+for (int i = 0; i < 3; i++) {
+    println("Hello World $i")
+}
+```
+
+Iteration over list objects is also possible using the syntax below:
+
+```{groovy, engine.path = '/usr/bin/groovy', comment = ''}
+list = ['a', 'b', 'c']
+
+for (String elem : list) {
+    println elem
+}
+
+```
+
+# Closures
+
+In Groovy, the user defined function is called a closure.
+
+# Channels
+
+Channels are a key data structure of Nextflow that allows the implementation of reactive-functional oriented computational workflows based on the Dataflow programming paradigm.
+
+They are used to logically connect tasks to each other or to implement functional style data transformations.
+
+## Channel types
+
+Nextflow distinguishes two different kinds of channels: queue channels and value channels.
+
+### Queue channel
+
+A queue channel is an asynchronous unidirectional FIFO queue that connects two processes or operators.
+
+ * asynchronous means that operations are non-blocking.
+
+ * unidirectional means that data flows from a producer to a consumer.
+
+ * FIFO means that the data is guaranteed to be delivered in the same order as it is produced. First In, First Out.
+
+A queue channel is implicitly created by process output definitions or using channel factories such as ``Channel.of`` or ``Channel.fromPath``.
+
+### Value channels
+
+A value channel (a.k.a. singleton channel) by definition is bound to a single value and it can be read unlimited times without consuming its contents. A value channel is created using the value channel factory or by operators returning a single value, such as first, last, collect, count, min, max, reduce, and sum.
+
+## Channel factories
+These are Nextflow commands for creating channels that have implicit expected inputs and functions.
+
+### ``value()``
+The value channel factory is used to create a value channel. An optional not null argument can be specified to bind the channel to a specific value. For example:
+
+```
+ch1 = Channel.value() 
+ch2 = Channel.value('Hello there') 
+ch3 = Channel.value([1, 2, 3, 4, 5]) 
+```
+
+### ``of()``
+The factory ``Channel.of`` allows the creation of a queue channel with the values specified as arguments.
+
+```
+ch = Channel.of(1, 3, 5, 7)
+ch.view { "value: $it" }
+```
+
+The first line in this example creates a variable ``ch`` which holds a channel object. This channel emits the values specified as a parameter in the of channel factory. Thus the second line will print the following:
+
+```
+value: 1
+value: 3
+value: 5
+value: 7
+```
+
+The ``Channel.of`` channel factory works in a similar manner to ``Channel.from`` (which is now deprecated), fixing some inconsistent behaviors of the latter and providing better handling when specifying a range of values.
+
+### ``fromList()``
+The ``Channel.fromList`` channel factory creates a channel emitting the elements provided by a list object specified as an argument:
+
+```
+list = ['hello', 'world']
+
+Channel
+    .fromList(list)
+```
+
+### ``fromPath()``
+The ``fromPath`` channel factory creates a queue channel emitting one or more files matching the specified glob pattern.
+
+```
+Channel.fromPath('./data/meta/*.csv')
+```
+
+This example creates a channel and emits as many items as there are files with a csv extension in the ./data/meta folder. Each element is a file object implementing the Path interface.
+
+><i class="fa-solid fa-fire"></i> __Tip__:  
+Two asterisks, i.e. ``**``, works like ``*`` but cross directory boundaries. This syntax is generally used for matching complete paths. Curly brackets specify a collection of sub-patterns.
+
+### ``fromFilePairs()``
+The fromFilePairs channel factory creates a channel emitting the file pairs matching a glob pattern provided by the user. The matching files are emitted as tuples, in which the first element is the grouping key of the matching pair and the second element is the list of files (sorted in lexicographical order).
+
+```{bash, comment = '', echo = F, eval = T}
+cat bin/example_channels.nf
+```
+
+```{bash, comment = ''}
+nextflow run bin/example_channels.nf
+```
+
+# Operators I
+
+Operators are methods that allow you to connect, transform values, or apply some user-provided rules.
+
+
+## ``view()``
+The view operator prints the items emitted by a channel to the console standard output, appending a new line character to each item. For example:
+
+```{bash, comment = ''}
+cat bin/view_operator.nf
+```
+
+```{bash, comment = ''}
+nextflow run bin/view_operator.nf
+```
+
+## ``map()``
+The map operator applies a function of your choosing to every item emitted by a channel and returns the items obtained as a new channel. The function applied is called the mapping function and is expressed with a closure as shown in the example below:
+
+```{bash, comment = ''}
+cat bin/map_operator1.nf
+```
+
+```{bash, comment = ''}
+nextflow run bin/map_operator1.nf
+```
+
+A ``map()`` can associate a generic tuple to each element and can contain any data.
+
+```{bash, comment = ''}
+cat bin/map_operator2.nf
+```
+
+```{bash, comment = ''}
+nextflow run bin/map_operator2.nf
+```
+
+## ``mix()``
+The mix operator combines the items emitted by two (or more) channels into a single channel.
+
+```{bash, comment = ''}
+cat bin/mix_operator.nf
+```
+
+```{bash, comment = ''}
+nextflow run bin/mix_operator.nf
+```
+
+## ``join()``
+The join operator creates a channel that joins together the items emitted by two channels with a matching key. The key is defined, by default, as the first element in each item emitted.
+
+
+```{bash, comment = ''}
+cat bin/join_operator.nf
+```
+
+```{bash, comment = ''}
+nextflow run bin/join_operator.nf
+```
+
+## ``combine()``
+The combine operator combines (cartesian product) the items emitted by two channels or by a channel and a Collection object (as right operand). COmbine returns a queue channel. For example:
+
+```{bash, comment = ''}
+cat bin/combine_operator1.nf
+```
+
+```{bash, comment = ''}
+nextflow run bin/combine_operator1.nf
+```
+
+A second version of the ``combine`` operator allows you to combine items that share a common matching key. The index of the key element is specified by using the by parameter (zero-based index, multiple indices can be specified as a list of integers). For example:
+
+```{bash, comment = ''}
+cat bin/combine_operator2.nf
+```
+
+```{bash, comment = ''}
+nextflow run bin/combine_operator2.nf
+```
+
+## ``concat()``
+The concat operator allows you to concatenate the items emitted by two or more channels to a new channel. The items emitted by the resulting channel are in the same order as specified in the operator arguments.
+
+In other words, given N channels, the items from the i+1 th channel are emitted only after all of the items from the i th channel have been emitted.
+
+For example:
+
+```{bash, comment = ''}
+cat bin/concat_operator.nf
+```
+
+```{bash, comment = ''}
+nextflow run bin/concat_operator.nf
+```
+
+## ``count()``
+The count operator creates a channel that emits a single item: a number that represents the total number of items emitted by the source channel. For example:
+
+```{bash, comment = ''}
+cat bin/count_operator.nf
+```
+
+```{bash, comment = ''}
+nextflow run bin/count_operator.nf
+```
+
+## ``ifEmpty()``
+The ifEmpty operator creates a channel which emits a default value, specified as the operator parameter, when the channel to which is applied is empty i.e. doesn’t emit any value. Otherwise it will emit the same sequence of entries as the original channel.
+
+Thus, the following example prints:
+
+```{bash, comment = ''}
+cat bin/ifempty_operator.nf
+```
+
+```{bash, comment = ''}
+nextflow run bin/ifempty_operator.nf
+```
+
+## ``toSortedList()``
+The toSortedList operator collects all the items emitted by a channel to a List object where they are sorted and emits the resulting collection as a single item. For example:
+
+```{bash, comment = ''}
+cat bin/tosortedlist_operator.nf
+```
+
+```{bash, comment = ''}
+nextflow run bin/tosortedlist_operator.nf
+```
+
+## ``unique()``
+
+The unique operator allows you to remove duplicate items from a channel and only emit single items with no repetition.
+
+For example:
+
+```{bash, comment = ''}
+cat bin/unique_operator.nf
+```
+
+```{bash, comment = ''}
+nextflow run bin/unique_operator.nf
+```
+
+## ``take()``
+The take operator allows you to filter only the first n items emitted by a channel. For example:
+
+```{bash, comment = ''}
+cat bin/take_operator.nf
+```
+
+```{bash, comment = ''}
+nextflow run bin/take_operator.nf
+
+
+
+
+
 
 
 ```{r,child="assets/footer-lab.Rmd"}
