@@ -28,9 +28,6 @@ To define a variable, simply assign a value to it:
 ```{groovy, engine.path = '/usr/bin/groovy', comment = ''}
 x = 1
 println x
-
-x = new java.util.Date()
-println x
 ```
 ```{groovy, engine.path = '/usr/bin/groovy', comment = ''}
 x = new java.util.Date()
@@ -129,7 +126,7 @@ map.put('c', 'z')
 assert map == [a: 'x', b: 'y', c: 'z']
 ```
 
-## String interpolation
+## String Interpolation
 
 String literals can be defined by enclosing them with either single- (``''``) or double- (``""``) quotation marks.
 
@@ -227,7 +224,20 @@ for (String elem : list) {
 
 # Closures
 
-In Groovy, the user defined function is called a closure.
+In Groovy, the user defined function is called a closure. A closure is a block of code that can be passed as an argument to a function. Thus, you can define a chunk of code and then pass it around as if it were a string or an integer.
+
+```{groovy, engine.path = '/usr/bin/groovy', comment = ''}
+square = { it * it }
+```
+
+The curly brackets around the expression ``it * it`` tells the script interpreter to treat this expression as code. The ``it`` identifier is an implicit variable that represents the value that is passed to the function when it is invoked.
+
+Once compiled the function object is assigned to the variable square as any other variable assignments shown previously. Now we can do something like this:
+
+```{groovy, engine.path = '/usr/bin/groovy', comment = ''}
+square = { it * it }
+println square(9)
+```
 
 # Channels
 
@@ -309,7 +319,7 @@ This example creates a channel and emits as many items as there are files with a
 Two asterisks, i.e. ``**``, works like ``*`` but cross directory boundaries. This syntax is generally used for matching complete paths. Curly brackets specify a collection of sub-patterns.
 
 ### ``fromFilePairs()``
-The fromFilePairs channel factory creates a channel emitting the file pairs matching a glob pattern provided by the user. The matching files are emitted as tuples, in which the first element is the grouping key of the matching pair and the second element is the list of files (sorted in lexicographical order).
+The ``fromFilePairs`` channel factory creates a channel emitting the file pairs matching a glob pattern provided by the user. The matching files are emitted as tuples, in which the first element is the grouping key of the matching pair and the second element is the list of files (sorted in lexicographical order).
 
 ```{bash, comment = '', echo = F, eval = T}
 cat bin/example_channels.nf
@@ -369,7 +379,6 @@ nextflow run bin/mix_operator.nf
 
 ## ``join()``
 The join operator creates a channel that joins together the items emitted by two channels with a matching key. The key is defined, by default, as the first element in each item emitted.
-
 
 ```{bash, comment = ''}
 cat bin/join_operator.nf
@@ -473,10 +482,17 @@ cat bin/take_operator.nf
 
 ```{bash, comment = ''}
 nextflow run bin/take_operator.nf
+```
 
+## Assesment 1
 
+1. Use a Groovy closure to find the maximum value in a list of numbers.
 
+2. Create a function to count the occurrences of a specific word in a text.
 
+3. Given the /data/samplesheet.csv, read the input files from the samplesheet into a channel which cotains the fastq as well as the metadata associated with it.
+
+4. Separate the above channel based on the sample type.
 
 
 
