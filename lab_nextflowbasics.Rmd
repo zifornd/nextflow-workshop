@@ -484,15 +484,13 @@ cat bin/take_operator.nf
 nextflow run bin/take_operator.nf
 ```
 
-## Assesment 1
+## Assessment 1
 
 1. Use a Groovy closure to find the maximum value in a list of numbers.
 
 2. Create a function to count the occurrences of a specific word in a text.
 
-3. Given the /data/samplesheet.csv, read the input files from the samplesheet into a channel which cotains the fastq as well as the metadata associated with it.
-
-4. Separate the above channel based on the sample type.
+3. Read the fastq files present in ``**data/reads/**`` into a channel, also parse and add metadata in the channel.
 
 
 
