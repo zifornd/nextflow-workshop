@@ -1,0 +1,180 @@
+---
+title: "Nextflow Intermediate"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+---
+
+```{r, child = "assets/header-lab.Rmd"}
+```
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(chunk.title = TRUE, engine.opts = list(bash = "-l"))
+```
+
+# Introduction
+
+In this workshop, we will explore the advanced features of the Nextflow language and runtime, and learn how to use them to write efficient and scalable data-intensive workflows.
+
+# Objectives
+
+- [Processes]
+- [Operators]
+
+# Tutorial
+
+We will cover topics such as parallel Channels, Processes, and Operators.
+
+## Processes
+
+We now know how to create and use Channels to send data around a workflow. We will now see how to run tasks within a workflow using [processes](https://training.nextflow.io/basic_training/processes/).
+
+A process is the way Nextflow executes commands you would run on the command line or custom scripts.
+
+The syntax is defined as follows:
+```
+process < NAME > {
+  [ directives ]
+  input:
+  < process inputs >
+  output:
+  < process outputs >
+  when:
+  < condition >
+  [script|shell|exec]:
+  < user script to be executed >
+}
+```
+For example:
+
+Example:
+```{bash,comment=''}
+cat bin/example_process.nf
+```
+Output:
+```{bash}
+nextflow run bin/example_collect.nf
+```
+### Directives
+
+Directive declarations allow the definition of optional settings that affect the execution of the current process without affecting the semantic of the task itself.
+
+Directives are commonly used to define the amount of computing resources to be used or other meta directives that allow the definition of extra configuration of logging information.
+
+**List of directives**
+
+| Name      | Description                                                                                                                                         |
+| --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------|
+| `cpus`    | Allows you to define the number of (logical) CPUs required by the process’ task.                                                                    |
+| `time`    | Allows you to define how long the task is allowed to run (e.g., time 1h: 1 hour, 1s 1 second, 1m 1 minute, 1d 1 day).                               |
+| `memory`  | Allows you to define how much memory the task is allowed to use (e.g., 2 GB is 2 GB). Can also use B, KB,MB,GB and TB.                              |
+| `disk`    | Allows you to define how much local disk storage the task is allowed to use.                                                                        |
+| `tag`     | Allows you to associate each process execution with a custom label to make it easier to identify them in the log file or the trace execution report.|
+| `publishDir`| Allows you to save important, non-intermediary, and/or final files in a results folder.                                                           |
+
+
+## Operators
+
+In this chapter, we take a curated tour of the Nextflow [operators](https://training.nextflow.io/basic_training/operators/). Commonly used and well understood operators are not covered here - only those that we've seen could use more attention or those where the usage could be more elaborate. These set of operators have been chosen to illustrate tangential concepts and Nextflow features.
+
+### flatten()
+
+The flatten operator transforms a channel in such a way that every tuple is flattened so that each entry is emitted as a sole element by the resulting channel.
+
+Example:
+```{bash,comment=''}
+cat bin/example_flatten.nf
+```
+Output:
+```{bash}
+nextflow run bin/example_flatten.nf
+```
+
+### collect()
+
+The collect operator collects all of the items emitted by a channel in a list and returns the object as a sole emission.
+
+Example:
+```{bash,comment=''}
+cat bin/example_collect.nf
+```
+Output:
+```{bash}
+nextflow run bin/example_collect.nf
+```
+
+### groupTuple()
+
+The groupTuple operator collects tuples (or lists) of values emitted by the source channel, grouping the elements that share the same key. Finally, it emits a new tuple object for each distinct key collected.
+
+Example:
+```{bash,comment=''}
+cat bin/example_groupTuple.nf
+```
+Output:
+```{bash}
+nextflow run bin/example_groupTuple.nf
+```
+
+### branch()
+
+The branch operator allows you to forward the items emitted by a source channel to one or more output channels.
+
+The selection criterion is defined by specifying a closure that provides one or more boolean expressions, each of which is identified by a unique label. For the first expression that evaluates to a true value, the item is bound to a named channel as the label identifier. For example:
+
+```{bash,comment=''}
+cat bin/example_branch.nf
+```
+Output:
+```{bash}
+nextflow run bin/example_branch.nf
+```
+
+### splitCsv()
+
+A common Nextflow pattern is for a simple samplesheet to be passed as primary input into a workflow. We'll see some more complicated ways to manage these inputs later on in the workshop, but the splitCsv (docs) is an excellent tool to have in a pinch. This operator will parse a csv/tsv and return a channel where each item is a row in the csv/tsv:
+
+```{bash,comment=''}
+cat bin/example_splitCsv.nf
+```
+Output:
+
+```{bash}
+nextflow run bin/example_splitCsv.nf
+```
+
+### multiMap()
+
+The [multiMap](https://www.nextflow.io/docs/latest/operator.html#multimap) operator is a way of taking a single input channel and emitting into multiple channels for each input element.
+
+Example:
+
+```{bash,comment=''}
+cat bin/example_multiMap.nf
+```
+Output:
+```{bash}
+nextflow run bin/example_multiMap.nf
+```
+
+# Exercises
+
+The exercises below are designed to strengthen your knowledge in Nextflow more. The solution to each problem is blurred, only after attempting to solve the problem yourself should you look at the solution. Should you need any help, please ask one of the instructors.
+
+1. Create a Nextflow module for samtools to generate an output structure in the directory "results," with a separate sub-directory for each given sample ID, and within each sub-directory, the results needs to be there
+
+Your Nextflow module should include the following:
+
+* Input parameters for specifying the input data (e.g., aligned BAM files).
+
+* script should contain any two functions from samtools.
+
+* setup the process to run on minimal no.of cpus and tag the process with sample ids
+
+2. Given sample sheet contain multiple entries for same sample and mixed of single and paired end, create separate channel for single and multiple entries.
+
+```{r,echo=FALSE,comment=''}
+data <- read.csv("https://raw.githubusercontent.com/nf-core/test-datasets/rnaseq/samplesheet/v3.10/samplesheet_test.csv")
+data
+```
+
+```{r,child="assets/footer-lab.Rmd"}
+```
