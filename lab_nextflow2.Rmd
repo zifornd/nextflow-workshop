@@ -16,52 +16,12 @@ In this workshop, we will explore the advanced features of the Nextflow language
 
 # Objectives
 
-- [Channels]
 - [Processes]
 - [Operators]
 
 # Tutorial
 
 We will cover topics such as parallel Channels, Processes, and Operators.
-
-## Channels
-
-Nextflow is based on the dataflow programming model in which processes communicate through [channels](https://training.nextflow.io/basic_training/channels/).
-
-Channel types
-Nextflow distinguishes between two different kinds of channels: queue channels and value channels.
-
-1. Sending a message is an asynchronous (i.e. non-blocking) operation, which means the sender doesn’t have to wait for the receiving process.
-
-2. Receiving a message is a synchronous (i.e. blocking) operation, which means the receiving process must wait until a message has arrived.
-
-**Queue** channels are a type of channel in which data is consumed (used up) to make input for a process/operator. Queue channels can be created in two ways:
-
-As the outputs of a process.
-Explicitly using channel factory methods such as Channel.of or Channel.fromPath.
-
-### Channel.of()
-When you want to create a channel containing multiple values you can use the channel factory Channel.of. Channel.of allows the creation of a queue channel with the values specified as arguments, separated by a ,.
-
-### Channel.fromList()
-You can use the Channel.fromList method to create a queue channel from a list object.
-
-### Channel.fromPath()
-The fromPath factory method creates a queue channel containing one or more files matching a file path.
-
-### Channel.fromFilePairs()
-We have seen how to process files individually using fromPath. In Bioinformatics we often want to process files in pairs or larger groups, such as read pairs in sequencing.
-
-For example:
-
-Example:
-```{bash,comment=''}
-cat bin/example_channels.nf
-```
-Output:
-```{bash}
-nextflow run bin/example_channels.nf
-```
 
 ## Processes
 
@@ -93,6 +53,23 @@ Output:
 ```{bash}
 nextflow run bin/example_collect.nf
 ```
+### Directives
+
+Directive declarations allow the definition of optional settings that affect the execution of the current process without affecting the semantic of the task itself.
+
+Directives are commonly used to define the amount of computing resources to be used or other meta directives that allow the definition of extra configuration of logging information.
+
+**List of directives**
+
+| Name      | Description                                                                                                                                         |
+| --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------|
+| `cpus`    | Allows you to define the number of (logical) CPUs required by the process’ task.                                                                    |
+| `time`    | Allows you to define how long the task is allowed to run (e.g., time 1h: 1 hour, 1s 1 second, 1m 1 minute, 1d 1 day).                               |
+| `memory`  | Allows you to define how much memory the task is allowed to use (e.g., 2 GB is 2 GB). Can also use B, KB,MB,GB and TB.                              |
+| `disk`    | Allows you to define how much local disk storage the task is allowed to use.                                                                        |
+| `tag`     | Allows you to associate each process execution with a custom label to make it easier to identify them in the log file or the trace execution report.|
+| `publishDir`| Allows you to save important, non-intermediary, and/or final files in a results folder.                                                           |
+
 
 ## Operators
 
@@ -180,7 +157,7 @@ nextflow run bin/example_multiMap.nf
 
 # Exercises
 
-The exercies below are designed to strengthen your knowledge in Nextflow more. The solution to each problem is blurred, only after attempting to solve the problem yourself should you look at the solution. Should you need any help, please ask one of the instructors.
+The exercises below are designed to strengthen your knowledge in Nextflow more. The solution to each problem is blurred, only after attempting to solve the problem yourself should you look at the solution. Should you need any help, please ask one of the instructors.
 
 1. Create a Nextflow module for samtools to generate an output structure in the directory "results," with a separate sub-directory for each given sample ID, and within each sub-directory, the results needs to be there
 
@@ -189,6 +166,8 @@ Your Nextflow module should include the following:
 * Input parameters for specifying the input data (e.g., aligned BAM files).
 
 * script should contain any two functions from samtools.
+
+* setup the process to run on minimal no.of cpus and tag the process with sample ids
 
 2. Given sample sheet contain multiple entries for same sample and mixed of single and paired end, create separate channel for single and multiple entries.
 
