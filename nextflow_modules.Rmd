@@ -1,0 +1,264 @@
+---
+title: "Nextflow Modularization"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+---
+
+```{r, child = "assets/header-lab.Rmd"}
+```
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(chunk.title = TRUE, engine.opts = list(bash = "-l"))
+```
+
+# Introduction
+
+In this workshop, we will explore efficient way of writing Nextflow scripts and learn about the basic folder structure that should be maintained in a nextflow pipeline.
+
+# Objectives
+
+- [Modules]
+- [Subworkflows]
+- [Workflows]
+- [Nextflow configuration]
+
+# Tutorial
+
+We will cover the modularization and configuration of nextflow scripts.
+
+
+
+## What is modularization?
+
+Modularization is basically dividing the whole nextflow script into smaller parts. It simplifies the writing of complex data analysis worflows and makes re-use of processes easier.
+
+## How can it be done?
+
+It can be achieved by converting the workflow's processes into modules, then call them within the workflow scope in a variety of ways.
+
+
+## Creating a nf-core pipeline
+
+A new pipeline with a template of nf-core pipeline can be created using **nf-core create** command.
+
+*Example:*
+```
+nf-core create -n testpipeline -d "Test pipeline" -a "Diya" --plain
+```
+
+*Output*:
+```{bash,comment=''}
+tree -d nf-core-testpipeline/
+```
+
+## Modules
+
+Stand-alone module scripts can be included and shared across multiple workflows. Each module can contain its own process or workflow definition.
+
+*Example:*
+```{bash,comment=''}
+cat bin/nf-modules/modules/cutadapt.nf
+```
+
+
+### Creating/ Installing modules using nf-core tools
+
+* Modules can be directly installed using the **nf-core modules install** command if module is  already present in the nf-core.
+  Note that a nf-core module can only be installed in a standard nf-core pipeline. The new module will be created in the modules/nf-core directory.
+
+  *Example:*
+  ```
+  nf-core modules install bowtie2/bowtie2_align
+  ```
+
+* If module is not already there then it can be created manually or a template can be created using the **nf-core modules create** command.
+
+  *Example:*
+  ```
+  nf-core create modules tximport
+  ```
+
+  *Output*:
+  ```{bash,comment=''}
+  tree nf-core-testpipeline/modules/
+  ```
+
+
+* A list of existing modules in nf-core can be got by **nf-core modules list remote** command.
+
+  *Example:*
+  ```
+  nf-core modules list remote
+  ```
+
+### Importing Modules
+
+* Components defined in the module script can be imported into other Nextflow scripts using the **include** statement.
+* This allows to store these components in a separate file(s) so that they can be re-used in multiple workflows.
+
+  *Example:*
+  ```
+  include { BOWTIE2_BUILD} from '/home/diya/nf-modules/modules/bowtie2_build'
+  ```
+
+### Module aliases
+
+* When including module component it is possible to specify a name alias using the **as** declaration.
+* This allows the inclusion and the invocation of the same component multiple times using different names
+
+  *Example:*
+  ```
+  include { BOWTIE2_ALIGN as BOWTIE2_ALIGN_CUTADAPT } from '/home/diya/nf-modules/modules/bowtie2_align'
+  include { BOWTIE2_ALIGN as BOWTIE2_ALIGN_TRIMMOMATIC } from '/home/diya/nf-modules/modules/bowtie2_align'
+  ```
+
+## Subworkflows
+
+* Two or more module scripts can be grouped into a subworkflow script.
+* Generally the modules performing related functions are grouped together.
+* The subworkflows can be imported in the workflow using **include** statement.
+
+
+
+### Creating/ Installing subworkflows using nf-core tools
+
+* Subworkflows can be directly installed using the **nf-core subworkflows install** command if subworkflow is  already present in the nf-core.
+  Note that a nf-core subworkflow can only be installed in a standard nf-core pipeline. The new subworkflow will be created in the subworkflows/nf-core directory.
+
+  *Example:*
+  ```
+  nf-core subworkflows install bam_markduplicates_samtools
+  ```
+
+* If subworkflow is not already there then it can be created manually or a template can be created using the **nf-core subworkflows create** command.
+
+  *Example:*
+  ```
+  nf-core subworkflows create bowtie2*
+  ```
+
+  *Output*:
+  ```{bash,comment=''}
+  tree nf-core-testpipeline/subworkflows
+  ```
+
+* A list of existing subworkflows in nf-core can be got by **nf-core subworkflows list remote** command.
+
+  *Example:*
+  ```
+  nf-core subworkflows list remote
+  ```
+
+
+### Subworkflow Structure
+
+The syntax is defined as follows:
+
+```
+include { < NAME > } from < PATH >
+<Importing the modules to be called in subworkflow>
+
+workflow < NAME > {
+  take:
+  < Declaring workflow inputs >
+  main:
+  < process are called an inputs are passed as arguments >
+  emit:
+  < Workflow output to be emitted >
+}
+```
+
+*Example:*
+```{bash,comment=''}
+cat bin/nf-modules/subworkflows/bowtie2.nf
+```
+
+
+## Workflows
+
+All the modules and subworkflows are called here and the input parameters are passed.
+
+
+
+### Workflow Structure
+
+* Importing the modules and subworkflows using **include**
+
+* Declare input channels and parameters if required
+
+* Calling processes and subworkflows and passing the input parameters
+
+*Example:*
+```{bash,comment=''}
+cat bin/nf-modules/workflows/trimalign.nf
+```
+
+
+## Main script
+
+*Main.nf* is typically the main script which is executed using the **nextflow run** command to execute the whole pipeline. The workflow is imported and invoked here. Thus, when the main script is executed the workflow is invoked which in turn invokes the modules and subworkflows and as a result the process are executed.
+
+*Example:*
+
+```{bash,comment=''}
+cat bin/nf-modules/main.nf
+```
+
+
+## Nextflow configuration
+
+A key Nextflow feature is the ability to decouple the workflow implementation by the configuration setting required by the underlying execution platform.
+This enables portable deployment without the need to modify the application code.
+
+### Nextflow.config file
+
+* When a workflow script is launched, Nextflow looks for a file named **nextflow.config** in the current directory and in the script base directory (if it is not the same as the current directory). Finally, it checks for the file: $HOME/.nextflow/config.
+* When more than one nextflow.config file exists, they are merged, so that the settings in the first override the same settings that may appear in the second, and so on.
+
+### Use of config file
+
+* The config file is used to pass values to different variables or params. The values can be some input files path, output directory path, some variables specifying the directives. 
+
+* Configuration properties can be used as variables in the configuration file itself, by using the usual $propertyName or ${expression} syntax.
+
+* The scope params allows the definition of workflow parameters that override the values defined in the main workflow script.
+
+* It can be also used to specify the mode of execution of the pipeline i.e whether using docker, conda , singularity, etc.
+
+
+*Example:*
+
+```{bash,comment=''}
+cat bin/nf-modules/nextflow.config
+```
+
+
+# Exercise
+
+## Zifo-Nextflow
+Document: Example SOW for developing a Nextflow computational pipeline
+Version: 0.1
+Under this Statement of Work the Supplier shall deliver the following Services and Deliverables:
+
+### Scope of Work
+Zifo is supporting the client by producing a computational pipeline for transcript-level expression analysis of RNA-seq experiments.
+
+### Description of Services and Deliverables:-
+
+Zifo to perform and support the following activities:
+
+* Develop a Nextflow pipeline which satisfies the following requirements:-
+    * Create a nextflow pipeline template.
+    * Use a samplesheet to pass the input raw sample files.
+    * Following the nf-core folder structure, develop nextflow scripts to automate the protocol as described in the Nature paper titled “Transcript-level expression analysis of RNA-seq experiments with HISAT, StringTie and Ballgown”.
+    *	The paper and materials are provided by the client in the data/Nextflow_SOW directory.
+
+* The pipeline must adhere to the following standards:-
+    * Use the latest version of language specification (i.e., DSL2)
+    * Use Docker containers to install and execute software.
+    *	Use sub-workflows for each major task. (e.g., alignment, quantification)
+    *	Run to completion without warning or error.
+    * Maintain the nf-core standards.
+
+
+```{r,child="assets/footer-lab.Rmd"}
+```
