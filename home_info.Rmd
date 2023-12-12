@@ -1,0 +1,59 @@
+---
+title: "Info"
+output:
+  bookdown::html_document2:
+    toc: false
+    number_sections: false
+---
+
+```{r,child="assets/header-lab.Rmd"}
+```
+
+## Location
+
+```{r,eval=TRUE,include=FALSE}
+library(yaml)
+library(leaflet)
+
+# set location in _site.yml
+loc <- yaml::read_yaml("_site.yml")$location
+
+if(loc=="chennai") {
+  dfr <- data.frame(venue_lat=13.021999562932578,
+                    venue_lon=80.17598320563087,
+                    venue_address="2nd Floor, Block 8, 1/124, Mount Poonamallee Rd, Manapakkam, Chennai, Tamil Nadu 600089, India",
+                    description="The workshop will be hosted in one of the following conference rooms: Block 2 (4th floor or 5th floor), Block 8 (2nd floor)",
+                    stringsAsFactors=F)
+}
+```
+
+```{r,eval=TRUE,echo=FALSE,chunk.title=NULL}
+if(loc!="online") {
+  address <- paste(unlist(strsplit(dfr$venue_address,split=",")),collapse="<br>")
+  leaflet(height=450,width="auto") %>%
+    addTiles(urlTemplate='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png') %>%
+    addMarkers(lat=dfr$venue_lat,lng=dfr$venue_lon,popup=address) %>%
+    setView(lat=dfr$venue_lat,lng=dfr$venue_lon,zoom=15)
+}
+```
+
+```{r,eval=TRUE,echo=FALSE,chunk.title=NULL,results="asis"}
+if(loc=="online") {
+  cat("The workshop is online only. Microsoft Teams links are sent to participants by email.")
+}
+```
+
+```{r,eval=TRUE,echo=FALSE,results="asis",chunk.title=NULL}
+if(loc!="online") {
+  cat("## Travel info")
+  cat("\n",dfr$description)
+}
+```
+
+## Contact
+
+This workshop is run by the Bioinformatics team at Zifo.
+
+If you would like to get in touch with us regarding this workshop, please contact us at **bioinformatics [at] zifornd.com**.
+
+***

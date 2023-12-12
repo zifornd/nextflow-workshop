@@ -1,0 +1,40 @@
+---
+title: "Content"
+output:
+  bookdown::html_document2:
+    toc: false
+    number_sections: false
+---
+
+```{r,child="assets/header-lab.Rmd"}
+```
+
+This page contains links to different lectures (slides) and practical exercises (labs) that are part of this workshop. The links below are similar to that under [Schedule](home_schedule.html) but organised here by topic.
+
+<br>
+
+<div class="boxy boxy-lightbulb">
+Input code blocks are displayed like shown below. The code language is displayed above the block. Shell scripts (**SH**) are to be executed in the linux terminal. **R** scripts are to be run in R either through the terminal, RGui or RStudio.
+
+```{sh,eval=FALSE,chunk.title=TRUE}
+command
+```
+
+<i class="fas fa-exclamation-circle"></i> Note &nbsp; <i class="fas fa-lightbulb"></i> Tip &nbsp; <i class="fas fa-comments"></i> Discuss &nbsp; <i class="fas fa-clipboard-list"></i> Task
+</div>
+
+<br>
+
+# Slides
+
+1.  [Introduction to Nextflow](slide_nextflow.html)
+
+
+# Labs
+
+1. [Nextflow Basics](lab_nextflowbasics.html)
+2. [Nextflow Intermediate](lab_nextflow2.html)
+3. [Nextflow Modularization](nextflow_modules.html)
+
+
+***
