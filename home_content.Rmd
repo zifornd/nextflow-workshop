@@ -34,7 +34,7 @@ command
 
 1. [Nextflow Basics](lab_nextflowbasics.html)
 2. [Nextflow Intermediate](lab_nextflow2.html)
-3. [Nextflow Modularization](nextflow_modules.html)
+3. [Nextflow Modularization](lab_nextflowmodules.html)
 
 
 ***
