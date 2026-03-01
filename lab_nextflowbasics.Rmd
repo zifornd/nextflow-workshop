@@ -10,7 +10,7 @@ date: "`r format(Sys.time(), '%d %B, %Y')`"
 knitr::opts_chunk$set(chunk.title = TRUE, engine.opts = list(bash = "-l"))
 ```
 
-Nextflow is a domain specific language (DSL) implemented on top of the Groovy programming language, which in turn is a super-set of the Java programming language. This means that Nextflow can run any Groovy or Java code.
+[Nextflow](https://docs.seqera.io/nextflow/) is a domain specific language (DSL) implemented on top of the Groovy programming language, which in turn is a super-set of the Java programming language. This means that Nextflow can run any Groovy or Java code.
 
 # Printing Values
 
@@ -241,7 +241,7 @@ println square(9)
 
 # Channels
 
-Channels are a key data structure of Nextflow that allows the implementation of reactive-functional oriented computational workflows based on the Dataflow programming paradigm.
+[Channels](https://docs.seqera.io/nextflow/reference/channel) are a key data structure of Nextflow that allows the implementation of reactive-functional oriented computational workflows based on the Dataflow programming paradigm.
 
 They are used to logically connect tasks to each other or to implement functional style data transformations.
 
@@ -331,7 +331,7 @@ nextflow run bin/example_channels.nf
 
 # Operators I
 
-Operators are methods that allow you to connect, transform values, or apply some user-provided rules.
+[Operators](https://docs.seqera.io/nextflow/reference/operator) are methods that allow you to connect, transform values, or apply some user-provided rules.
 
 
 ## ``view()``

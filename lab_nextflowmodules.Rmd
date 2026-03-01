@@ -38,16 +38,22 @@ It can be achieved by converting the workflow's processes into modules, then cal
 
 ## Creating a nf-core pipeline
 
-A new pipeline with a template of nf-core pipeline can be created using **nf-core create** command.
+nf-core tooling has commands for pipeline users and developers. To view all of the available commands use the nf-core --help argument.
+
+```
+nf-core --help
+```
+
+A new pipeline with a template of nf-core pipeline can be created using **nf-core pipelines create** command. Running this command will open a Text User Interface (TUI) for pipeline creation.
 
 *Example:*
 ```
-nf-core create -n testpipeline -d "Test pipeline" -a "Diya" --plain
+nf-core pipelines create
 ```
 
 *Output*:
 ```{bash,comment=''}
-tree -d nf-core-testpipeline/
+tree -d bin/nf-modules/nf-core-testpipeline/
 ```
 
 ## Modules
@@ -74,12 +80,12 @@ cat bin/nf-modules/modules/cutadapt.nf
 
   *Example:*
   ```
-  nf-core create modules tximport
+  nf-core modules create tximport
   ```
 
   *Output*:
   ```{bash,comment=''}
-  tree nf-core-testpipeline/modules/
+  tree -d bin/nf-modules/nf-core-testpipeline/modules
   ```
 
 
@@ -133,12 +139,12 @@ cat bin/nf-modules/modules/cutadapt.nf
 
   *Example:*
   ```
-  nf-core subworkflows create bowtie2*
+  nf-core subworkflows create bowtie2
   ```
 
   *Output*:
   ```{bash,comment=''}
-  tree nf-core-testpipeline/subworkflows
+  tree -d bin/nf-modules/nf-core-testpipeline/subworkflows
   ```
 
 * A list of existing subworkflows in nf-core can be got by **nf-core subworkflows list remote** command.
