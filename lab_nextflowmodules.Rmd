@@ -62,7 +62,7 @@ Stand-alone module scripts can be included and shared across multiple workflows.
 
 *Example:*
 ```{bash,comment=''}
-cat bin/nf-modules/modules/cutadapt.nf
+cat bin/nf-modules/nf-modules/modules/cutadapt.nf
 ```
 
 
@@ -175,7 +175,7 @@ workflow < NAME > {
 
 *Example:*
 ```{bash,comment=''}
-cat bin/nf-modules/subworkflows/bowtie2.nf
+cat bin/nf-modules/nf-modules/subworkflows/bowtie2.nf
 ```
 
 
@@ -195,7 +195,7 @@ All the modules and subworkflows are called here and the input parameters are pa
 
 *Example:*
 ```{bash,comment=''}
-cat bin/nf-modules/workflows/trimalign.nf
+cat bin/nf-modules/nf-modules/workflows/trimalign.nf
 ```
 
 
@@ -206,7 +206,7 @@ cat bin/nf-modules/workflows/trimalign.nf
 *Example:*
 
 ```{bash,comment=''}
-cat bin/nf-modules/main.nf
+cat bin/nf-modules/nf-modules/main.nf
 ```
 
 
@@ -234,7 +234,7 @@ This enables portable deployment without the need to modify the application code
 *Example:*
 
 ```{bash,comment=''}
-cat bin/nf-modules/nextflow.config
+cat bin/nf-modules/nf-modules/nextflow.config
 ```
 
 
