@@ -53,7 +53,7 @@ nf-core pipelines create
 
 *Output*:
 ```{bash,comment=''}
-tree -d bin/nf-modules/nf-core-testpipeline/
+tree -d nf-testpipeline/
 ```
 
 ## Modules
@@ -62,7 +62,7 @@ Stand-alone module scripts can be included and shared across multiple workflows.
 
 *Example:*
 ```{bash,comment=''}
-cat bin/nf-modules/nf-modules/modules/cutadapt.nf
+cat nf-testpipeline/modules/cutadapt.nf
 ```
 
 
@@ -85,7 +85,7 @@ cat bin/nf-modules/nf-modules/modules/cutadapt.nf
 
   *Output*:
   ```{bash,comment=''}
-  tree -d bin/nf-modules/nf-core-testpipeline/modules
+  tree -d nf-testpipeline/modules
   ```
 
 
@@ -144,7 +144,7 @@ cat bin/nf-modules/nf-modules/modules/cutadapt.nf
 
   *Output*:
   ```{bash,comment=''}
-  tree -d bin/nf-modules/nf-core-testpipeline/subworkflows
+  tree -d nf-testpipeline/subworkflows
   ```
 
 * A list of existing subworkflows in nf-core can be got by **nf-core subworkflows list remote** command.
@@ -175,7 +175,7 @@ workflow < NAME > {
 
 *Example:*
 ```{bash,comment=''}
-cat bin/nf-modules/nf-modules/subworkflows/bowtie2.nf
+cat nf-testpipeline/subworkflows/bowtie2.nf
 ```
 
 
@@ -195,7 +195,7 @@ All the modules and subworkflows are called here and the input parameters are pa
 
 *Example:*
 ```{bash,comment=''}
-cat bin/nf-modules/nf-modules/workflows/trimalign.nf
+cat nf-testpipeline/workflows/trimalign.nf
 ```
 
 
@@ -206,7 +206,7 @@ cat bin/nf-modules/nf-modules/workflows/trimalign.nf
 *Example:*
 
 ```{bash,comment=''}
-cat bin/nf-modules/nf-modules/main.nf
+cat nf-testpipeline/main.nf
 ```
 
 
@@ -222,7 +222,7 @@ This enables portable deployment without the need to modify the application code
 
 ### Use of config file
 
-* The config file is used to pass values to different variables or params. The values can be some input files path, output directory path, some variables specifying the directives. 
+* The config file is used to pass values to different variables or params. The values can be some input files path, output directory path, some variables specifying the directives.
 
 * Configuration properties can be used as variables in the configuration file itself, by using the usual $propertyName or ${expression} syntax.
 
@@ -234,7 +234,7 @@ This enables portable deployment without the need to modify the application code
 *Example:*
 
 ```{bash,comment=''}
-cat bin/nf-modules/nf-modules/nextflow.config
+cat nf-testpipeline/nextflow.config
 ```
 
 
