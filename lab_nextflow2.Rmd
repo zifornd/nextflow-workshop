@@ -25,7 +25,7 @@ We will cover topics such as parallel Channels, Processes, and Operators.
 
 ## Processes
 
-We now know how to create and use Channels to send data around a workflow. We will now see how to run tasks within a workflow using [processes](https://training.nextflow.io/basic_training/processes/).
+We now know how to create and use Channels to send data around a workflow. We will now see how to run tasks within a workflow using [processes](https://docs.seqera.io/nextflow/process).
 
 A process is the way Nextflow executes commands you would run on the command line or custom scripts.
 
@@ -55,7 +55,7 @@ nextflow run bin/example_collect.nf
 ```
 ### Directives
 
-Directive declarations allow the definition of optional settings that affect the execution of the current process without affecting the semantic of the task itself.
+[Directive](https://docs.seqera.io/nextflow/process#directives) declarations allow the definition of optional settings that affect the execution of the current process without affecting the semantic of the task itself.
 
 Directives are commonly used to define the amount of computing resources to be used or other meta directives that allow the definition of extra configuration of logging information.
 
@@ -73,7 +73,7 @@ Directives are commonly used to define the amount of computing resources to be u
 
 ## Operators
 
-In this chapter, we take a curated tour of the Nextflow [operators](https://training.nextflow.io/basic_training/operators/). Commonly used and well understood operators are not covered here - only those that we've seen could use more attention or those where the usage could be more elaborate. These set of operators have been chosen to illustrate tangential concepts and Nextflow features.
+In this chapter, we take a curated tour of the Nextflow [operators](https://docs.seqera.io/nextflow/reference/operator). Commonly used and well understood operators are not covered here - only those that we've seen could use more attention or those where the usage could be more elaborate. These set of operators have been chosen to illustrate tangential concepts and Nextflow features.
 
 ### flatten()
 
@@ -143,7 +143,7 @@ nextflow run bin/example_splitCsv.nf
 
 ### multiMap()
 
-The [multiMap](https://www.nextflow.io/docs/latest/operator.html#multimap) operator is a way of taking a single input channel and emitting into multiple channels for each input element.
+The multiMap operator is a way of taking a single input channel and emitting into multiple channels for each input element.
 
 Example:
 
@@ -157,7 +157,7 @@ nextflow run bin/example_multiMap.nf
 
 # Exercises
 
-The exercises below are designed to strengthen your knowledge in Nextflow more. The solution to each problem is blurred, only after attempting to solve the problem yourself should you look at the solution. Should you need any help, please ask one of the instructors.
+The exercises below are designed to strengthen your knowledge in Nextflow. 
 
 1. Create a Nextflow module for samtools to generate an output structure in the directory "results," with a separate sub-directory for each given sample ID, and within each sub-directory, the results needs to be there
 
@@ -169,7 +169,7 @@ Your Nextflow module should include the following:
 
 * setup the process to run on minimal no.of cpus and tag the process with sample ids
 
-2. Given sample sheet contain multiple entries for same sample and mixed of single and paired end, create separate channel for single and multiple entries.
+2. Given sample sheet contains multiple entries for same sample and a mix of single and paired end reads, create separate channel for single and multiple entries.
 
 ```{r,echo=FALSE,comment=''}
 data <- read.csv("https://raw.githubusercontent.com/nf-core/test-datasets/rnaseq/samplesheet/v3.10/samplesheet_test.csv")

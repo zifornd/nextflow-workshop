@@ -135,9 +135,9 @@ knitr::include_graphics("data/nextflow-features.png")
  
  * Requirements
 
-    * Bash
+    * Bash 3.2 (or later) 
     
-    * Java 11 (or later, up to 18)
+    * Java 17 (or later, up to 25)
     
     * Git
     

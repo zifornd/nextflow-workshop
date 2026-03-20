@@ -38,16 +38,22 @@ It can be achieved by converting the workflow's processes into modules, then cal
 
 ## Creating a nf-core pipeline
 
-A new pipeline with a template of nf-core pipeline can be created using **nf-core create** command.
+nf-core tooling has commands for pipeline users and developers. To view all of the available commands use the nf-core --help argument.
+
+```
+nf-core --help
+```
+
+A new pipeline with a template of nf-core pipeline can be created using **nf-core pipelines create** command. Running this command will open a Text User Interface (TUI) for pipeline creation.
 
 *Example:*
 ```
-nf-core create -n testpipeline -d "Test pipeline" -a "Diya" --plain
+nf-core pipelines create
 ```
 
 *Output*:
 ```{bash,comment=''}
-tree -d nf-core-testpipeline/
+tree -d nf-testpipeline/
 ```
 
 ## Modules
@@ -56,7 +62,7 @@ Stand-alone module scripts can be included and shared across multiple workflows.
 
 *Example:*
 ```{bash,comment=''}
-cat bin/nf-modules/modules/cutadapt.nf
+cat nf-testpipeline/modules/cutadapt.nf
 ```
 
 
@@ -74,12 +80,12 @@ cat bin/nf-modules/modules/cutadapt.nf
 
   *Example:*
   ```
-  nf-core create modules tximport
+  nf-core modules create tximport
   ```
 
   *Output*:
   ```{bash,comment=''}
-  tree nf-core-testpipeline/modules/
+  tree -d nf-testpipeline/modules
   ```
 
 
@@ -133,12 +139,12 @@ cat bin/nf-modules/modules/cutadapt.nf
 
   *Example:*
   ```
-  nf-core subworkflows create bowtie2*
+  nf-core subworkflows create bowtie2
   ```
 
   *Output*:
   ```{bash,comment=''}
-  tree nf-core-testpipeline/subworkflows
+  tree -d nf-testpipeline/subworkflows
   ```
 
 * A list of existing subworkflows in nf-core can be got by **nf-core subworkflows list remote** command.
@@ -169,7 +175,7 @@ workflow < NAME > {
 
 *Example:*
 ```{bash,comment=''}
-cat bin/nf-modules/subworkflows/bowtie2.nf
+cat nf-testpipeline/subworkflows/bowtie2.nf
 ```
 
 
@@ -189,7 +195,7 @@ All the modules and subworkflows are called here and the input parameters are pa
 
 *Example:*
 ```{bash,comment=''}
-cat bin/nf-modules/workflows/trimalign.nf
+cat nf-testpipeline/workflows/trimalign.nf
 ```
 
 
@@ -200,7 +206,7 @@ cat bin/nf-modules/workflows/trimalign.nf
 *Example:*
 
 ```{bash,comment=''}
-cat bin/nf-modules/main.nf
+cat nf-testpipeline/main.nf
 ```
 
 
@@ -216,7 +222,7 @@ This enables portable deployment without the need to modify the application code
 
 ### Use of config file
 
-* The config file is used to pass values to different variables or params. The values can be some input files path, output directory path, some variables specifying the directives. 
+* The config file is used to pass values to different variables or params. The values can be some input files path, output directory path, some variables specifying the directives.
 
 * Configuration properties can be used as variables in the configuration file itself, by using the usual $propertyName or ${expression} syntax.
 
@@ -228,7 +234,7 @@ This enables portable deployment without the need to modify the application code
 *Example:*
 
 ```{bash,comment=''}
-cat bin/nf-modules/nextflow.config
+cat nf-testpipeline/nextflow.config
 ```
 
 
